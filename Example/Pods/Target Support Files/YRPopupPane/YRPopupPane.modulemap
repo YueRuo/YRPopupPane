@@ -1,0 +1,6 @@
+framework module YRPopupPane {
+  umbrella header "YRPopupPane-umbrella.h"
+
+  export *
+  module * { export * }
+}

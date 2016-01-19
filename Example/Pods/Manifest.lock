@@ -1,0 +1,14 @@
+PODS:
+  - YRPopupPane (0.1.0)
+
+DEPENDENCIES:
+  - YRPopupPane (from `../`)
+
+EXTERNAL SOURCES:
+  YRPopupPane:
+    :path: ../
+
+SPEC CHECKSUMS:
+  YRPopupPane: 75b93d9d53c103809bc001fc5619231d86d530b8
+
+COCOAPODS: 0.39.0
