@@ -24,6 +24,7 @@ typedef enum {
 @property (retain,nonatomic) UIView *customPopupView;//弹出的视图
 @property (assign,nonatomic) NSTimeInterval animateDuration;//动画时长
 @property (assign,nonatomic) BOOL enableBlur NS_AVAILABLE_IOS(8_0);//启用高斯模糊,默认是YES
+@property (assign,nonatomic) BOOL needBackgroupView;//是否需要遮罩层,默认是YES,否则直接在被添加的view上弹出
 
 @property (assign,nonatomic) CGFloat xOffset;//x轴的偏移量
 @property (assign,nonatomic) CGFloat yOffset;//y轴的偏移量

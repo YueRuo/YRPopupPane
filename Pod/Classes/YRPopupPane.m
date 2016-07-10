@@ -9,10 +9,10 @@
 #import "YRPopupPane.h"
 
 @interface YRPopupPane (){
-    CGRect prePopupFrame;
+    CGRect _prePopupFrame;
     UIView *_visualEfView;
 }
-
+@property (weak,nonatomic) UIView *targetView;//被添加到该view上
 @end
 
 @implementation YRPopupPane
@@ -29,6 +29,7 @@
         _animateDuration = 0.25f;
         
         _enableBlur = true;
+        _needBackgroupView = true;
         if ([[[UIDevice currentDevice] systemVersion] compare:@"8.0"] != NSOrderedAscending) {
             _visualEfView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleDark]];
             _visualEfView.alpha = 1;
@@ -59,21 +60,28 @@
     if (!self.customPopupView) {
         return;
     }
-    prePopupFrame = self.customPopupView.frame;
-    self.frame = view.bounds;
-    _visualEfView.frame = self.bounds;
-    [self addSubview:self.customPopupView];
-    self.alpha = 0;
-    [view addSubview:self];
+    _targetView = view;
+    _prePopupFrame = self.customPopupView.frame;
+    if (_needBackgroupView) {
+        self.frame = view.bounds;
+        _visualEfView.frame = self.bounds;
+        [self addSubview:self.customPopupView];
+        self.alpha = 0;
+        [view addSubview:self];
+    }else{
+        self.customPopupView.alpha = 0;
+        [view addSubview:self.customPopupView];
+    }
     if (animated) {
+        UIView *addedView = _needBackgroupView?self:self.customPopupView;
         if (self.direction==YRPopupDirection_FromMiddle) {
             self.customPopupView.transform = CGAffineTransformIdentity;
             self.customPopupView.frame = [self customViewInsideFrameInView:view];
             self.customPopupView.transform = CGAffineTransformMakeScale(0.2, 0.2);
             [UIView animateWithDuration:0.1 animations:^{
-                self.alpha = 1;
+                addedView.alpha = 1;
             }completion:^(BOOL finished) {
-                self.alpha = 1;
+                addedView.alpha = 1;
                 [UIView animateWithDuration:self.animateDuration delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
                     self.customPopupView.transform = CGAffineTransformIdentity;
                 } completion:nil];
@@ -81,9 +89,9 @@
         }else{
             self.customPopupView.frame = [self customViewOutFrameInView:view];
             [UIView animateWithDuration:0.1 animations:^{
-                self.alpha = 1;
+                addedView.alpha = 1;
             }completion:^(BOOL finished) {
-                self.alpha = 1;
+                addedView.alpha = 1;
                 [UIView animateWithDuration:self.animateDuration delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
                     self.customPopupView.frame = [self customViewInsideFrameInView:view];
                 } completion:nil];
@@ -94,7 +102,8 @@
     }
 }
 -(void)hide:(BOOL)animated{
-    if (![self superview]) {
+    UIView *addedView = _needBackgroupView?self:self.customPopupView;
+    if (![addedView superview]) {
         return;
     }
     if (animated) {
@@ -104,29 +113,29 @@
                 self.customPopupView.transform = CGAffineTransformMakeScale(0.2, 0.2);
             } completion:^(BOOL finished) {
                 [UIView animateWithDuration:0.1 animations:^{
-                    self.alpha = 0;
+                    addedView.alpha = 0;
                 }completion:^(BOOL finished) {
-                    self.alpha = 0;
+                    addedView.alpha = 0;
                     self.customPopupView.transform = CGAffineTransformIdentity;
-                    [self removeFromSuperview];
+                    [addedView removeFromSuperview];
                 }];
             }];
         }else{
-            self.customPopupView.frame = [self customViewInsideFrameInView:[self superview]];
+            self.customPopupView.frame = [self customViewInsideFrameInView:_targetView];
             [UIView animateWithDuration:self.animateDuration delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-                self.customPopupView.frame = [self customViewOutFrameInView:[self superview]];
+                self.customPopupView.frame = [self customViewOutFrameInView:_targetView];
             } completion:^(BOOL finished) {
                 [UIView animateWithDuration:0.1 animations:^{
-                    self.alpha = 0;
+                    addedView.alpha = 0;
                 }completion:^(BOOL finished) {
-                    self.alpha = 0;
-                    [self removeFromSuperview];
+                    addedView.alpha = 0;
+                    [addedView removeFromSuperview];
                 }];
             }];
         }
     }else{
-        self.customPopupView.frame = [self customViewInsideFrameInView:[self superview]];
-        [self removeFromSuperview];
+        self.customPopupView.frame = [self customViewInsideFrameInView:_targetView];
+        [addedView removeFromSuperview];
     }
 }
 
@@ -134,19 +143,19 @@
     CGRect frame = CGRectZero;
     switch (self.direction) {
         case YRPopupDirection_FromTop:{
-            frame = CGRectMake(self.xOffset+(view.frame.size.width-prePopupFrame.size.width)/2, self.yOffset+0, prePopupFrame.size.width, prePopupFrame.size.height);
+            frame = CGRectMake(self.xOffset+(view.frame.size.width-_prePopupFrame.size.width)/2, self.yOffset+0, _prePopupFrame.size.width, _prePopupFrame.size.height);
             break;}
         case YRPopupDirection_FromLeft:{
-            frame = CGRectMake(self.xOffset+0, self.yOffset+(view.frame.size.height-prePopupFrame.size.height)/2, prePopupFrame.size.width, prePopupFrame.size.height);
+            frame = CGRectMake(self.xOffset+0, self.yOffset+(view.frame.size.height-_prePopupFrame.size.height)/2, _prePopupFrame.size.width, _prePopupFrame.size.height);
             break;}
         case YRPopupDirection_FromBottom:{
-            frame = CGRectMake(self.xOffset+(view.frame.size.width-prePopupFrame.size.width)/2, self.yOffset+view.frame.size.height-prePopupFrame.size.height, prePopupFrame.size.width, prePopupFrame.size.height);
+            frame = CGRectMake(self.xOffset+(view.frame.size.width-_prePopupFrame.size.width)/2, self.yOffset+view.frame.size.height-_prePopupFrame.size.height, _prePopupFrame.size.width, _prePopupFrame.size.height);
             break;}
         case YRPopupDirection_FromRight:{
-            frame = CGRectMake(self.xOffset+view.frame.size.width-prePopupFrame.size.width, self.yOffset+(view.frame.size.height-prePopupFrame.size.height)/2, prePopupFrame.size.width, prePopupFrame.size.height);
+            frame = CGRectMake(self.xOffset+view.frame.size.width-_prePopupFrame.size.width, self.yOffset+(view.frame.size.height-_prePopupFrame.size.height)/2, _prePopupFrame.size.width, _prePopupFrame.size.height);
             break;}
         case YRPopupDirection_FromMiddle:{
-            frame = CGRectMake(self.xOffset+(view.frame.size.width-prePopupFrame.size.width)/2, self.yOffset+(view.frame.size.height-prePopupFrame.size.height)/2, prePopupFrame.size.width, prePopupFrame.size.height);
+            frame = CGRectMake(self.xOffset+(view.frame.size.width-_prePopupFrame.size.width)/2, self.yOffset+(view.frame.size.height-_prePopupFrame.size.height)/2, _prePopupFrame.size.width, _prePopupFrame.size.height);
             break;}
         default:
             break;
@@ -158,16 +167,16 @@
     CGRect frame = CGRectZero;
     switch (self.direction) {
         case YRPopupDirection_FromTop:{
-            frame = CGRectMake(self.xOffset+(view.frame.size.width-prePopupFrame.size.width)/2, self.yOffset-prePopupFrame.size.height, prePopupFrame.size.width, prePopupFrame.size.height);
+            frame = CGRectMake(self.xOffset+(view.frame.size.width-_prePopupFrame.size.width)/2, self.yOffset-_prePopupFrame.size.height, _prePopupFrame.size.width, _prePopupFrame.size.height);
             break;}
         case YRPopupDirection_FromLeft:{
-            frame = CGRectMake(self.xOffset-prePopupFrame.size.width, self.yOffset+(view.frame.size.height-prePopupFrame.size.height)/2, prePopupFrame.size.width, prePopupFrame.size.height);
+            frame = CGRectMake(self.xOffset-_prePopupFrame.size.width, self.yOffset+(view.frame.size.height-_prePopupFrame.size.height)/2, _prePopupFrame.size.width, _prePopupFrame.size.height);
             break;}
         case YRPopupDirection_FromBottom:{
-            frame = CGRectMake(self.xOffset+(view.frame.size.width-prePopupFrame.size.width)/2, self.yOffset+view.frame.size.height, prePopupFrame.size.width, prePopupFrame.size.height);
+            frame = CGRectMake(self.xOffset+(view.frame.size.width-_prePopupFrame.size.width)/2, self.yOffset+view.frame.size.height, _prePopupFrame.size.width, _prePopupFrame.size.height);
             break;}
         case YRPopupDirection_FromRight:{
-            frame = CGRectMake(self.xOffset+view.frame.size.width, self.yOffset+(view.frame.size.height-prePopupFrame.size.height)/2, prePopupFrame.size.width, prePopupFrame.size.height);
+            frame = CGRectMake(self.xOffset+view.frame.size.width, self.yOffset+(view.frame.size.height-_prePopupFrame.size.height)/2, _prePopupFrame.size.width, _prePopupFrame.size.height);
             break;}
         case YRPopupDirection_FromMiddle:{
             frame = CGRectMake(self.xOffset+(view.frame.size.width-1)/2, self.yOffset+(view.frame.size.height-1)/2, 1, 1);
@@ -179,15 +188,21 @@
 }
 
 -(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
-    UITouch *touch = [touches anyObject];
-    CGPoint location = [touch locationInView:self];
-    if (CGRectContainsPoint(self.customPopupView.frame, location)) {
-        return;
+    if (_needBackgroupView) {
+        UITouch *touch = [touches anyObject];
+        CGPoint location = [touch locationInView:self];
+        if (CGRectContainsPoint(self.customPopupView.frame, location)) {
+            return;
+        }
+        [self hide:true];
     }
-    [self hide:true];
 }
 
 -(BOOL)onShow{
-    return self.superview!=nil;
+    if (_needBackgroupView) {
+        return self.superview!=nil;
+    }else{
+        return self.customPopupView.superview!=nil;
+    }
 }
 @end
