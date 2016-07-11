@@ -7,6 +7,7 @@
 //
 
 #import "YRPopupPane.h"
+static NSMutableArray *lifecyleArray;
 
 @interface YRPopupPane (){
     CGRect _prePopupFrame;
@@ -16,6 +17,10 @@
 @end
 
 @implementation YRPopupPane
++(void)initialize{
+    lifecyleArray = [NSMutableArray arrayWithCapacity:20];
+}
+
 -(instancetype)init{
     return [self initWithFrame:CGRectZero];
 }
@@ -59,6 +64,9 @@
 -(void)showInView:(UIView*)view animated:(BOOL)animated{
     if (!self.customPopupView) {
         return;
+    }
+    if (![lifecyleArray containsObject:self]) {
+        [lifecyleArray addObject:self];
     }
     _targetView = view;
     _prePopupFrame = self.customPopupView.frame;
@@ -112,6 +120,7 @@
     if (![addedView superview]) {
         return;
     }
+    [lifecyleArray removeObject:self];
     if (animated) {
         CGRect fromFrame = [self customViewInsideFrameInView:_targetView];
         CGRect toFrame = [self customViewOutFrameInView:_targetView];
