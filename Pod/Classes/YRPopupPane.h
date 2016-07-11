@@ -12,7 +12,7 @@
 #import <UIKit/UIKit.h>
 
 typedef enum {
-    YRPopupDirection_FromTop=1,//上
+    YRPopupDirection_FromTop = 1,//上
     YRPopupDirection_FromLeft,//左
     YRPopupDirection_FromBottom,//下
     YRPopupDirection_FromRight,//右
@@ -25,6 +25,8 @@ typedef enum {
 @property (assign,nonatomic) NSTimeInterval animateDuration;//动画时长
 @property (assign,nonatomic) BOOL enableBlur NS_AVAILABLE_IOS(8_0);//启用高斯模糊,默认是YES
 @property (assign,nonatomic) BOOL needBackgroupView;//是否需要遮罩层,默认是YES,否则直接在被添加的view上弹出
+@property (copy,nonatomic) void(^showAnimationBlock)(YRPopupPane *popup);//可自定义出现动画,一般不需要使用
+@property (copy,nonatomic) void(^hideAnimationBlock)(YRPopupPane *popup);//可自定义消失动画,一般不需要使用
 
 @property (assign,nonatomic) CGFloat xOffset;//x轴的偏移量
 @property (assign,nonatomic) CGFloat yOffset;//y轴的偏移量

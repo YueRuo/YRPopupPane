@@ -73,29 +73,33 @@
         [view addSubview:self.customPopupView];
     }
     if (animated) {
-        UIView *addedView = _needBackgroupView?self:self.customPopupView;
-        if (self.direction==YRPopupDirection_FromMiddle) {
-            self.customPopupView.transform = CGAffineTransformIdentity;
-            self.customPopupView.frame = [self customViewInsideFrameInView:view];
-            self.customPopupView.transform = CGAffineTransformMakeScale(0.2, 0.2);
-            [UIView animateWithDuration:0.1 animations:^{
-                addedView.alpha = 1;
-            }completion:^(BOOL finished) {
-                addedView.alpha = 1;
-                [UIView animateWithDuration:self.animateDuration delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-                    self.customPopupView.transform = CGAffineTransformIdentity;
-                } completion:nil];
-            }];
+        if(self.showAnimationBlock){
+            self.showAnimationBlock(self);
         }else{
-            self.customPopupView.frame = [self customViewOutFrameInView:view];
-            [UIView animateWithDuration:0.1 animations:^{
-                addedView.alpha = 1;
-            }completion:^(BOOL finished) {
-                addedView.alpha = 1;
-                [UIView animateWithDuration:self.animateDuration delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-                    self.customPopupView.frame = [self customViewInsideFrameInView:view];
-                } completion:nil];
-            }];
+            UIView *addedView = _needBackgroupView?self:self.customPopupView;
+            if (self.direction==YRPopupDirection_FromMiddle) {
+                self.customPopupView.transform = CGAffineTransformIdentity;
+                self.customPopupView.frame = [self customViewInsideFrameInView:view];
+                self.customPopupView.transform = CGAffineTransformMakeScale(0.2, 0.2);
+                [UIView animateWithDuration:0.1 animations:^{
+                    addedView.alpha = 1;
+                }completion:^(BOOL finished) {
+                    addedView.alpha = 1;
+                    [UIView animateWithDuration:self.animateDuration delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                        self.customPopupView.transform = CGAffineTransformIdentity;
+                    } completion:nil];
+                }];
+            }else{
+                self.customPopupView.frame = [self customViewOutFrameInView:view];
+                [UIView animateWithDuration:0.1 animations:^{
+                    addedView.alpha = 1;
+                }completion:^(BOOL finished) {
+                    addedView.alpha = 1;
+                    [UIView animateWithDuration:self.animateDuration delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                        self.customPopupView.frame = [self customViewInsideFrameInView:view];
+                    } completion:nil];
+                }];
+            }
         }
     }else{
         self.customPopupView.frame = [self customViewInsideFrameInView:view];
@@ -107,31 +111,35 @@
         return;
     }
     if (animated) {
-        if (self.direction==YRPopupDirection_FromMiddle) {
-            self.customPopupView.transform = CGAffineTransformIdentity;
-            [UIView animateWithDuration:self.animateDuration delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-                self.customPopupView.transform = CGAffineTransformMakeScale(0.2, 0.2);
-            } completion:^(BOOL finished) {
-                [UIView animateWithDuration:0.1 animations:^{
-                    addedView.alpha = 0;
-                }completion:^(BOOL finished) {
-                    addedView.alpha = 0;
-                    self.customPopupView.transform = CGAffineTransformIdentity;
-                    [addedView removeFromSuperview];
-                }];
-            }];
+        if (self.hideAnimationBlock) {
+            self.hideAnimationBlock(self);
         }else{
-            self.customPopupView.frame = [self customViewInsideFrameInView:_targetView];
-            [UIView animateWithDuration:self.animateDuration delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-                self.customPopupView.frame = [self customViewOutFrameInView:_targetView];
-            } completion:^(BOOL finished) {
-                [UIView animateWithDuration:0.1 animations:^{
-                    addedView.alpha = 0;
-                }completion:^(BOOL finished) {
-                    addedView.alpha = 0;
-                    [addedView removeFromSuperview];
+            if (self.direction==YRPopupDirection_FromMiddle) {
+                self.customPopupView.transform = CGAffineTransformIdentity;
+                [UIView animateWithDuration:self.animateDuration delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                    self.customPopupView.transform = CGAffineTransformMakeScale(0.2, 0.2);
+                } completion:^(BOOL finished) {
+                    [UIView animateWithDuration:0.1 animations:^{
+                        addedView.alpha = 0;
+                    }completion:^(BOOL finished) {
+                        addedView.alpha = 0;
+                        self.customPopupView.transform = CGAffineTransformIdentity;
+                        [addedView removeFromSuperview];
+                    }];
                 }];
-            }];
+            }else{
+                self.customPopupView.frame = [self customViewInsideFrameInView:_targetView];
+                [UIView animateWithDuration:self.animateDuration delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                    self.customPopupView.frame = [self customViewOutFrameInView:_targetView];
+                } completion:^(BOOL finished) {
+                    [UIView animateWithDuration:0.1 animations:^{
+                        addedView.alpha = 0;
+                    }completion:^(BOOL finished) {
+                        addedView.alpha = 0;
+                        [addedView removeFromSuperview];
+                    }];
+                }];
+            }
         }
     }else{
         self.customPopupView.frame = [self customViewInsideFrameInView:_targetView];

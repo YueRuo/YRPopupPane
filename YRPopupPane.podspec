@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "YRPopupPane"
-  s.version          = "1.0.0"
+  s.version          = "1.0.2"
   s.summary          = "A popup view . support top,left,right,bottom and center"
 
 # This description is used to generate tags and improve search results.
@@ -31,9 +31,9 @@ A popup view . support top,left,right,bottom and center . Enjoy it.
   s.requires_arc = true
 
   s.source_files = 'Pod/Classes/**/*'
-  s.resource_bundles = {
-    'YRPopupPane' => ['Pod/Assets/*.png']
-  }
+#s.resource_bundles = {
+#    'YRPopupPane' => ['Pod/Assets/*.png']
+# }
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
