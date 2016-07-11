@@ -73,13 +73,15 @@
         [view addSubview:self.customPopupView];
     }
     if (animated) {
+        CGRect toFrame = [self customViewInsideFrameInView:_targetView];
+        CGRect fromFrame = [self customViewOutFrameInView:_targetView];
         if(self.showAnimationBlock){
-            self.showAnimationBlock(self);
+            self.showAnimationBlock(self,fromFrame,toFrame);
         }else{
             UIView *addedView = _needBackgroupView?self:self.customPopupView;
             if (self.direction==YRPopupDirection_FromMiddle) {
                 self.customPopupView.transform = CGAffineTransformIdentity;
-                self.customPopupView.frame = [self customViewInsideFrameInView:view];
+                self.customPopupView.frame = toFrame;
                 self.customPopupView.transform = CGAffineTransformMakeScale(0.2, 0.2);
                 [UIView animateWithDuration:0.1 animations:^{
                     addedView.alpha = 1;
@@ -90,13 +92,13 @@
                     } completion:nil];
                 }];
             }else{
-                self.customPopupView.frame = [self customViewOutFrameInView:view];
+                self.customPopupView.frame = fromFrame;
                 [UIView animateWithDuration:0.1 animations:^{
                     addedView.alpha = 1;
                 }completion:^(BOOL finished) {
                     addedView.alpha = 1;
                     [UIView animateWithDuration:self.animateDuration delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-                        self.customPopupView.frame = [self customViewInsideFrameInView:view];
+                        self.customPopupView.frame = toFrame;
                     } completion:nil];
                 }];
             }
@@ -111,8 +113,10 @@
         return;
     }
     if (animated) {
+        CGRect fromFrame = [self customViewInsideFrameInView:_targetView];
+        CGRect toFrame = [self customViewOutFrameInView:_targetView];
         if (self.hideAnimationBlock) {
-            self.hideAnimationBlock(self);
+            self.hideAnimationBlock(self,fromFrame,toFrame);
         }else{
             if (self.direction==YRPopupDirection_FromMiddle) {
                 self.customPopupView.transform = CGAffineTransformIdentity;
@@ -128,9 +132,9 @@
                     }];
                 }];
             }else{
-                self.customPopupView.frame = [self customViewInsideFrameInView:_targetView];
+                self.customPopupView.frame = fromFrame;
                 [UIView animateWithDuration:self.animateDuration delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-                    self.customPopupView.frame = [self customViewOutFrameInView:_targetView];
+                    self.customPopupView.frame = toFrame;
                 } completion:^(BOOL finished) {
                     [UIView animateWithDuration:0.1 animations:^{
                         addedView.alpha = 0;
