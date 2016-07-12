@@ -35,6 +35,7 @@ static NSMutableArray *lifecyleArray;
         
         _enableBlur = true;
         _needBackgroupView = true;
+        _hideOnTouchBackgroup = true;
         if ([[[UIDevice currentDevice] systemVersion] compare:@"8.0"] != NSOrderedAscending) {
             _visualEfView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleDark]];
             _visualEfView.alpha = 1;
@@ -209,13 +210,15 @@ static NSMutableArray *lifecyleArray;
 }
 
 -(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
-    if (_needBackgroupView) {
+    if (_needBackgroupView&&_hideOnTouchBackgroup) {
         UITouch *touch = [touches anyObject];
         CGPoint location = [touch locationInView:self];
         if (CGRectContainsPoint(self.customPopupView.frame, location)) {
             return;
         }
         [self hide:true];
+    }else{
+        [super touchesEnded:touches withEvent:event];
     }
 }
 
