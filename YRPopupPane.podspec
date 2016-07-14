@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "YRPopupPane"
-  s.version          = "1.0.5"
+  s.version          = "1.0.6"
   s.summary          = "A popup view . support top,left,right,bottom and center"
 
 # This description is used to generate tags and improve search results.
