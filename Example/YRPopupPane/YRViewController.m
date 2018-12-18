@@ -10,7 +10,6 @@
 #import "YRPopupPane.h"
 
 @interface YRViewController (){
-    YRPopupPane *popup;
 }
 
 @end
@@ -21,13 +20,11 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
-    popup = [[YRPopupPane alloc]init];
+    self.view.backgroundColor = UIColor.brownColor;
+    
 }
 - (IBAction)clicked:(id)sender {
-    if ([popup onShow]) {
-        [popup hide:true];
-        return;
-    }
+    YRPopupPane *popup = [[YRPopupPane alloc]init];
     UIButton *customView = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 100)];
     [customView addTarget:self action:@selector(hide:) forControlEvents:UIControlEventTouchUpInside];
     customView.backgroundColor = [UIColor purpleColor];
@@ -37,10 +34,7 @@
     [popup showInView:self.view animated:true];
 }
 - (IBAction)click2:(id)sender {
-    if ([popup onShow]) {
-        [popup hide:true];
-        return;
-    }
+    YRPopupPane *popup = [[YRPopupPane alloc]init];
     UIView *customView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 50, 100)];
     customView.backgroundColor = [UIColor brownColor];
     
@@ -51,10 +45,7 @@
     [popup showInView:self.view animated:true];
 }
 - (IBAction)click3:(id)sender {
-    if ([popup onShow]) {
-        [popup hide:true];
-        return;
-    }
+    YRPopupPane *popup = [[YRPopupPane alloc]init];
     UIView *customView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 150, 100)];
     customView.backgroundColor = [UIColor brownColor];
     
@@ -68,9 +59,5 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
--(void)hide:(UIButton*)button{
-    [popup hide:true];
 }
 @end

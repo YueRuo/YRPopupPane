@@ -21,7 +21,7 @@ typedef enum {
 
 @class YRPopupPane;
 typedef void(^YRPopupPaneAnimationBlock)(YRPopupPane *popup, CGRect fromFrame, CGRect toFrame);
-typedef void(^YRPopupPaneHideForBackgroundTouchBlock)();
+typedef void(^YRPopupPaneHideBlock)();
 
 @interface YRPopupPane : UIView
 @property (assign, nonatomic) YRPopupDirection direction;//弹出方向
@@ -32,9 +32,13 @@ typedef void(^YRPopupPaneHideForBackgroundTouchBlock)();
 @property (assign, nonatomic) BOOL enableBlur NS_AVAILABLE_IOS(8_0);//启用高斯模糊,默认是YES
 @property (assign, nonatomic) BOOL needBackgroupView;//是否需要遮罩层,默认是YES,否则直接在被添加的view上弹出
 @property (assign, nonatomic) BOOL hideOnTouchBackground;//遮罩存在时，点击遮罩层时自动消失,默认是YES
+@property (assign, nonatomic) BOOL enableAutoRotate;//启用自动转屏，默认为NO，启用后会在转屏之后重新布局
 @property (copy, nonatomic) YRPopupPaneAnimationBlock showAnimationBlock;//可自定义出现动画,一般不需要使用
 @property (copy, nonatomic) YRPopupPaneAnimationBlock hideAnimationBlock;//可自定义消失动画,一般不需要使用
-@property (copy, nonatomic) YRPopupPaneHideForBackgroundTouchBlock willHideForBackgroundTouchBlock;//由于点击背景导致的弹窗消失，只有遮罩存在，且hideOnTouchBackground为YES时生效
+
+@property (copy, nonatomic) YRPopupPaneHideBlock willHideForBackgroundTouchBlock;//由于点击背景导致的弹窗消失，只有遮罩存在，且hideOnTouchBackground为YES时生效
+@property (copy, nonatomic) YRPopupPaneHideBlock willHideBlock;//即将消失的回调
+@property (copy, nonatomic) YRPopupPaneHideBlock didHideBlock;//消失后回调
 
 @property (strong, nonatomic) id data; //生命周期保护,挂到该属性上的data会在弹窗出现期间被额外持有不释放,但要小心别弄成循环引用，不可以是showInView方法的view
 
@@ -46,5 +50,5 @@ typedef void(^YRPopupPaneHideForBackgroundTouchBlock)();
 //为了代码补全
 - (void)setShowAnimationBlock:(YRPopupPaneAnimationBlock)showAnimationBlock;
 - (void)setHideAnimationBlock:(YRPopupPaneAnimationBlock)hideAnimationBlock;
-- (void)setWillHideForBackgroundTouchBlock:(YRPopupPaneHideForBackgroundTouchBlock)hideForBackgroundTouchBlock;
+- (void)setWillHideForBackgroundTouchBlock:(YRPopupPaneHideBlock)hideForBackgroundTouchBlock;
 @end
