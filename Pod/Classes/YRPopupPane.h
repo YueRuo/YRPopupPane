@@ -20,8 +20,8 @@ typedef enum {
 } YRPopupDirection;
 
 @class YRPopupPane;
-typedef void(^YRPopupPaneAnimationBlock)(YRPopupPane *popup, CGRect fromFrame, CGRect toFrame);
-typedef void(^YRPopupPaneHideBlock)();
+typedef void (^YRPopupPaneAnimationBlock)(YRPopupPane *popup, CGRect fromFrame, CGRect toFrame);
+typedef void (^YRPopupPaneHideBlock)();
 
 @interface YRPopupPane : UIView
 @property (assign, nonatomic) YRPopupDirection direction;//弹出方向
@@ -51,4 +51,6 @@ typedef void(^YRPopupPaneHideBlock)();
 - (void)setShowAnimationBlock:(YRPopupPaneAnimationBlock)showAnimationBlock;
 - (void)setHideAnimationBlock:(YRPopupPaneAnimationBlock)hideAnimationBlock;
 - (void)setWillHideForBackgroundTouchBlock:(YRPopupPaneHideBlock)hideForBackgroundTouchBlock;
+- (void)setWillHideBlock:(YRPopupPaneHideBlock)willHideBlock;
+- (void)setDidHideBlock:(YRPopupPaneHideBlock)didHideBlock;
 @end
