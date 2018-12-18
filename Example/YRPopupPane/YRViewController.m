@@ -28,6 +28,7 @@
     UIButton *customView = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 100)];
     [customView addTarget:self action:@selector(hide:) forControlEvents:UIControlEventTouchUpInside];
     customView.backgroundColor = [UIColor purpleColor];
+    customView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleWidth;
     
     popup.customPopupView = customView;
     popup.direction = YRPopupDirection_FromBottom;

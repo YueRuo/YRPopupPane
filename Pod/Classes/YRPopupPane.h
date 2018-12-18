@@ -8,6 +8,27 @@
 
 /*!
  *	@class	基础的弹出层
+ *
+ *  @note 如果需要转屏适配，可以通过调整customPopupView的autoresizingMask实现，一般关系如下
+
+     switch (self.direction) {
+     case YRPopupDirection_FromTop:
+         self.customPopupView.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin|UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin;//如果需要宽度跟随变化，再加上UIViewAutoresizingFlexibleWidth
+     break;
+     case YRPopupDirection_FromLeft:
+         self.customPopupView.autoresizingMask = UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin;//如果需要高度跟随变化，再加上UIViewAutoresizingFlexibleHeight
+     break;
+     case YRPopupDirection_FromBottom:
+             self.customPopupView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin;//如果需要宽度跟随变化，再加上UIViewAutoresizingFlexibleWidth
+     break;
+     case YRPopupDirection_FromRight:
+         self.customPopupView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin;//如果需要高度跟随变化，再加上UIViewAutoresizingFlexibleHeight
+     break;
+     case YRPopupDirection_FromMiddle:
+         self.customPopupView.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin|UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleLeftMargin;
+     default:
+     break;
+     }
  */
 #import <UIKit/UIKit.h>
 
@@ -20,8 +41,8 @@ typedef enum {
 } YRPopupDirection;
 
 @class YRPopupPane;
-typedef void (^YRPopupPaneAnimationBlock)(YRPopupPane *popup, CGRect fromFrame, CGRect toFrame);
-typedef void (^YRPopupPaneHideBlock)();
+typedef void(^YRPopupPaneAnimationBlock)(YRPopupPane *popup, CGRect fromFrame, CGRect toFrame);
+typedef void(^YRPopupPaneHideBlock)();
 
 @interface YRPopupPane : UIView
 @property (assign, nonatomic) YRPopupDirection direction;//弹出方向
@@ -32,7 +53,6 @@ typedef void (^YRPopupPaneHideBlock)();
 @property (assign, nonatomic) BOOL enableBlur NS_AVAILABLE_IOS(8_0);//启用高斯模糊,默认是YES
 @property (assign, nonatomic) BOOL needBackgroupView;//是否需要遮罩层,默认是YES,否则直接在被添加的view上弹出
 @property (assign, nonatomic) BOOL hideOnTouchBackground;//遮罩存在时，点击遮罩层时自动消失,默认是YES
-@property (assign, nonatomic) BOOL enableAutoRotate;//启用自动转屏，默认为NO，启用后会在转屏之后重新布局
 @property (copy, nonatomic) YRPopupPaneAnimationBlock showAnimationBlock;//可自定义出现动画,一般不需要使用
 @property (copy, nonatomic) YRPopupPaneAnimationBlock hideAnimationBlock;//可自定义消失动画,一般不需要使用
 

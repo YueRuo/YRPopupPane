@@ -98,9 +98,7 @@ static NSMutableArray *lifecyleArray;
                 self.customPopupView.frame = toFrame;
                 [UIView animateWithDuration:0.1 animations:^{
                     addedView.alpha = 1;
-                }completion:^(BOOL finished) {
-                    [self updateFinalAutoResizing];
-                }];
+                }completion:nil];
                 CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
                 animation.duration = self.animateDuration;
                 animation.removedOnCompletion = YES;
@@ -115,9 +113,7 @@ static NSMutableArray *lifecyleArray;
                 } completion:^(BOOL finished) {
                     [UIView animateWithDuration:self.animateDuration delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
                         self.customPopupView.frame = toFrame;
-                    }completion:^(BOOL finished) {
-                        [self updateFinalAutoResizing];
-                    }];
+                    }completion:nil];
                 }];
             }
         }
@@ -125,7 +121,6 @@ static NSMutableArray *lifecyleArray;
         self.alpha = 1;
         self.customPopupView.alpha = 1;
         self.customPopupView.frame = [self customViewInsideFrameInView:view];
-        [self updateFinalAutoResizing];
     }
 }
 - (void)hide:(BOOL)animated {
@@ -238,27 +233,6 @@ static NSMutableArray *lifecyleArray;
             break;
     }
     return frame;
-}
-
-- (void)updateFinalAutoResizing{
-    switch (self.direction) {
-            case YRPopupDirection_FromTop:
-            self.customPopupView.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin|UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin;
-            break;
-            case YRPopupDirection_FromLeft:
-            self.customPopupView.autoresizingMask = UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin;
-            break;
-            case YRPopupDirection_FromBottom:
-            self.customPopupView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin;
-            break;
-            case YRPopupDirection_FromRight:
-            self.customPopupView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin;
-            break;
-            case YRPopupDirection_FromMiddle:
-            self.customPopupView.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin|UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleLeftMargin;
-        default:
-            break;
-    }
 }
 
 - (void)finishHide:(UIView*)addedView actionEnable:(BOOL)preActionEnable{
