@@ -10,25 +10,16 @@
  *	@class	基础的弹出层
  *
  *  @note 如果需要转屏适配，可以通过调整customPopupView的autoresizingMask实现，一般关系如下
-
-     switch (self.direction) {
      case YRPopupDirection_FromTop:
-         self.customPopupView.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin|UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin;//如果需要宽度跟随变化，再加上UIViewAutoresizingFlexibleWidth
-     break;
+         customPopupView.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin|UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin;//如果需要宽度跟随变化，再加上UIViewAutoresizingFlexibleWidth
      case YRPopupDirection_FromLeft:
-         self.customPopupView.autoresizingMask = UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin;//如果需要高度跟随变化，再加上UIViewAutoresizingFlexibleHeight
-     break;
+         customPopupView.autoresizingMask = UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin;//如果需要高度跟随变化，再加上UIViewAutoresizingFlexibleHeight
      case YRPopupDirection_FromBottom:
-             self.customPopupView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin;//如果需要宽度跟随变化，再加上UIViewAutoresizingFlexibleWidth
-     break;
+             customPopupView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin;//如果需要宽度跟随变化，再加上UIViewAutoresizingFlexibleWidth
      case YRPopupDirection_FromRight:
-         self.customPopupView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin;//如果需要高度跟随变化，再加上UIViewAutoresizingFlexibleHeight
-     break;
+         customPopupView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin;//如果需要高度跟随变化，再加上UIViewAutoresizingFlexibleHeight
      case YRPopupDirection_FromMiddle:
-         self.customPopupView.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin|UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleLeftMargin;
-     default:
-     break;
-     }
+         customPopupView.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin|UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleLeftMargin;
  */
 #import <UIKit/UIKit.h>
 
