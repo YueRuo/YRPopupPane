@@ -179,6 +179,7 @@ static NSMutableArray *lifecyleArray;
 
 - (CGRect)customViewInsideFrameInView:(UIView *)view {
     CGRect frame = CGRectZero;
+    _customPopupSize = self.customPopupView.frame.size;
     switch (self.direction) {
         case YRPopupDirection_FromTop: {
             frame = CGRectMake(self.xOffset + (view.frame.size.width - _customPopupSize.width) / 2, self.yOffset + 0, _customPopupSize.width, _customPopupSize.height);
@@ -208,6 +209,7 @@ static NSMutableArray *lifecyleArray;
 
 - (CGRect)customViewOutFrameInView:(UIView *)view {
     CGRect frame = CGRectZero;
+    _customPopupSize = self.customPopupView.frame.size;
     switch (self.direction) {
         case YRPopupDirection_FromTop: {
             frame = CGRectMake(self.xOffset + (view.frame.size.width - _customPopupSize.width) / 2, self.yOffset - _customPopupSize.height, _customPopupSize.width, _customPopupSize.height);
