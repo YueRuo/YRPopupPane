@@ -32,7 +32,7 @@ typedef enum {
 } YRPopupDirection;
 
 @class YRPopupPane;
-typedef void(^YRPopupPaneAnimationBlock)(YRPopupPane *popup, CGRect fromFrame, CGRect toFrame);
+typedef void(^YRPopupPaneAnimationBlock)(YRPopupPane *popup, dispatch_block_t finishedBlock);
 typedef void(^YRPopupPaneHideBlock)();
 
 @interface YRPopupPane : UIView
@@ -45,7 +45,7 @@ typedef void(^YRPopupPaneHideBlock)();
 @property (assign, nonatomic) BOOL needBackgroupView;//是否需要遮罩层,默认是YES,否则直接在被添加的view上弹出
 @property (assign, nonatomic) BOOL hideOnTouchBackground;//遮罩存在时，点击遮罩层时自动消失,默认是YES
 @property (copy, nonatomic) YRPopupPaneAnimationBlock showAnimationBlock;//可自定义出现动画,一般不需要使用
-@property (copy, nonatomic) YRPopupPaneAnimationBlock hideAnimationBlock;//可自定义消失动画,一般不需要使用
+@property (copy, nonatomic) YRPopupPaneAnimationBlock hideAnimationBlock;//可自定义消失动画,一般不需要使用,动画完成后必须要执行finishedBlock
 
 @property (copy, nonatomic) YRPopupPaneHideBlock willHideForBackgroundTouchBlock;//由于点击背景导致的弹窗消失，只有遮罩存在，且hideOnTouchBackground为YES时生效
 @property (copy, nonatomic) YRPopupPaneHideBlock willHideBlock;//即将消失的回调
@@ -57,6 +57,8 @@ typedef void(^YRPopupPaneHideBlock)();
 - (void)hide:(BOOL)animated;
 
 - (BOOL)onShow;
+
++ (void)hideAllPane:(BOOL)animated;//消除所有在显示的弹窗
 
 //为了代码补全
 - (void)setShowAnimationBlock:(YRPopupPaneAnimationBlock)showAnimationBlock;

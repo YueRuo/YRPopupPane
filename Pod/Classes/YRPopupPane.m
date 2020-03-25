@@ -90,7 +90,7 @@ static NSMutableArray *lifecyleArray;
         CGRect toFrame = [self customViewInsideFrameInView:_targetView];
         CGRect fromFrame = [self customViewOutFrameInView:_targetView];
         if (self.showAnimationBlock) {
-            self.showAnimationBlock(self, fromFrame, toFrame);
+            self.showAnimationBlock(self, ^{});
         } else {
             UIView *addedView = _needBackgroupView ? self : self.customPopupView;
             addedView.alpha = 0;
@@ -138,7 +138,10 @@ static NSMutableArray *lifecyleArray;
         CGRect fromFrame = [self customViewInsideFrameInView:_targetView];
         CGRect toFrame = [self customViewOutFrameInView:_targetView];
         if (self.hideAnimationBlock) {
-            self.hideAnimationBlock(self, fromFrame, toFrame);
+            __weak typeof(self) selfWeak = self;
+            self.hideAnimationBlock(self, ^{
+                [selfWeak finishHide:addedView actionEnable:preActionEnable];
+            });
         } else {
             if (self.direction == YRPopupDirection_FromMiddle) {
                 CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
@@ -172,6 +175,13 @@ static NSMutableArray *lifecyleArray;
     } else {
         self.customPopupView.frame = [self customViewInsideFrameInView:_targetView];
         [self finishHide:addedView actionEnable:preActionEnable];
+    }
+}
+
++ (void)hideAllPane:(BOOL)animated{//消除所有在显示的弹窗
+    for (NSInteger i = lifecyleArray.count - 1; i>=0; i--) {
+        id obj = [lifecyleArray objectAtIndex:i];
+        [obj hide:animated];
     }
 }
 
